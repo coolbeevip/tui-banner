@@ -1,8 +1,9 @@
 use crate::color::ColorMode;
 use crate::emit::emit_ansi;
+use crate::effects::dither::apply_dot_dither;
 use crate::effects::outline::{apply_edge_shade, EdgeShade};
 use crate::effects::shadow::{apply_shadow, Shadow};
-use crate::fill::{apply_fill, Fill};
+use crate::fill::{apply_fill, Dither, Fill};
 use crate::font::{render_text, Font};
 use crate::gradient::Gradient;
 use crate::grid::{Align, Grid, Padding};
@@ -16,6 +17,8 @@ pub struct Banner {
     fill: Fill,
     shadow: Option<Shadow>,
     edge_shade: Option<EdgeShade>,
+    dot_dither: Option<Dither>,
+    dot_dither_targets: Option<Vec<char>>,
     align: Align,
     padding: Padding,
     width: Option<usize>,
@@ -34,6 +37,8 @@ impl Banner {
             fill: Fill::Blocks,
             shadow: None,
             edge_shade: None,
+            dot_dither: None,
+            dot_dither_targets: None,
             align: Align::Left,
             padding: Padding::uniform(0),
             width: None,
@@ -67,6 +72,25 @@ impl Banner {
     pub fn edge_shade(mut self, darken: f32, ch: char) -> Self {
         self.edge_shade = Some(EdgeShade { ch, darken });
         self
+    }
+
+    pub fn dot_dither(mut self, dither: Dither) -> Self {
+        self.dot_dither = Some(dither);
+        self
+    }
+
+    pub fn dot_dither_targets(mut self, targets: &[char]) -> Self {
+        self.dot_dither_targets = Some(targets.to_vec());
+        self
+    }
+
+    pub fn dot_dither_targets_str(mut self, targets: &str) -> Self {
+        self.dot_dither_targets = Some(targets.chars().collect());
+        self
+    }
+
+    pub fn dither(self) -> DotDitherBuilder {
+        DotDitherBuilder::new(self)
     }
 
     pub fn align(mut self, align: Align) -> Self {
@@ -110,6 +134,14 @@ impl Banner {
         if let Some(gradient) = &self.gradient {
             gradient.apply(&mut grid);
         }
+        if let Some(dither) = self.dot_dither {
+            let default_targets = ['░', '▒'];
+            let targets = self
+                .dot_dither_targets
+                .as_deref()
+                .unwrap_or(&default_targets);
+            grid = apply_dot_dither(&grid, dither, targets);
+        }
         if let Some(shade) = self.edge_shade {
             grid = apply_edge_shade(&grid, shade);
         }
@@ -123,6 +155,70 @@ impl Banner {
         };
         emit_ansi(&grid, mode)
     }
+}
+
+pub struct DotDitherBuilder {
+    banner: Banner,
+    targets: Vec<char>,
+    dots: (char, char),
+}
+
+impl DotDitherBuilder {
+    fn new(banner: Banner) -> Self {
+        Self {
+            banner,
+            targets: vec!['░', '▒'],
+            dots: ('·', ':'),
+        }
+    }
+
+    pub fn targets(mut self, targets: &str) -> Self {
+        self.targets = targets.chars().collect();
+        self
+    }
+
+    pub fn targets_vec(mut self, targets: &[char]) -> Self {
+        self.targets = targets.to_vec();
+        self
+    }
+
+    pub fn dots(mut self, dots: &str) -> Self {
+        self.dots = parse_dots(dots);
+        self
+    }
+
+    pub fn checker(mut self, period: u8) -> Banner {
+        let dither = Dither {
+            mode: crate::fill::DitherMode::Checker { period },
+            dot: self.dots.0,
+            alt: self.dots.1,
+        };
+        self.banner = self
+            .banner
+            .dot_dither(dither)
+            .dot_dither_targets(&self.targets);
+        self.banner
+    }
+
+    pub fn noise(mut self, seed: u32, threshold: u8) -> Banner {
+        let dither = Dither {
+            mode: crate::fill::DitherMode::Noise { seed, threshold },
+            dot: self.dots.0,
+            alt: self.dots.1,
+        };
+        self.banner = self
+            .banner
+            .dot_dither(dither)
+            .dot_dither_targets(&self.targets);
+        self.banner
+    }
+}
+
+fn parse_dots(dots: &str) -> (char, char) {
+    let mut iter = dots.chars();
+    let first = iter.next().unwrap_or('·');
+    let second = iter.next().unwrap_or(first);
+    (first, second)
 }
 
 fn apply_layout(

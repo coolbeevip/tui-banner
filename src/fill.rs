@@ -24,6 +24,26 @@ pub enum DitherMode {
     Noise { seed: u32, threshold: u8 },
 }
 
+impl Dither {
+    pub fn checker(period: u8, dots: &str) -> Self {
+        let (dot, alt) = parse_dots(dots);
+        Self {
+            mode: DitherMode::Checker { period },
+            dot,
+            alt,
+        }
+    }
+
+    pub fn noise(seed: u32, threshold: u8, dots: &str) -> Self {
+        let (dot, alt) = parse_dots(dots);
+        Self {
+            mode: DitherMode::Noise { seed, threshold },
+            dot,
+            alt,
+        }
+    }
+}
+
 impl Fill {
     pub fn default_blocks() -> Self {
         Fill::Blocks
@@ -100,4 +120,11 @@ fn mix(seed: u32, x: u32, y: u32) -> u32 {
     v = v.wrapping_mul(0x846CA68B);
     v ^= v >> 16;
     v
+}
+
+fn parse_dots(dots: &str) -> (char, char) {
+    let mut iter = dots.chars();
+    let first = iter.next().unwrap_or('·');
+    let second = iter.next().unwrap_or(first);
+    (first, second)
 }

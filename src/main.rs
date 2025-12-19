@@ -9,6 +9,10 @@ fn main() {
             "#FF5AD9",
         ])))
         .fill(Fill::Keep)
+        .dither()
+        .targets("░▒▓")
+        .dots("·:")
+        .checker(3)
         .align(Align::Center)
         .padding(1)
         .render();
