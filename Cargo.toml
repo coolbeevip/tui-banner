@@ -11,7 +11,7 @@ homepage = "https://tui-banner-website.pages.dev/"
 authors = ["Lei Zhang <coolbeevip@gmail.com>"]
 keywords = ["tui", "banner", "ascii-art", "cli", "terminal"]
 categories = ["command-line-interface", "text-processing"]
-rust-version = "1.85"
+rust-version = "1.87"
 exclude = ["assets/*", "examples/*"]
 
 [dependencies]
