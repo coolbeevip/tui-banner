@@ -46,8 +46,6 @@ fn main() -> Result<(), tui_banner::BannerError> {
 ## Examples
 
 ```bash
-cargo run --example effects
-cargo run --example multiline
 cargo run --example neon_gradient_neon_cyber
 cargo run --example neon_gradient_arctic_tech
 cargo run --example neon_gradient_deep_space
@@ -61,6 +59,4 @@ cargo run --example neon_gradient_chrome
 cargo run --example neon_gradient_royal_purple
 cargo run --example neon_gradient_crt_amber
 cargo run --example neon_gradient_matrix
-cargo run --example no_color
-cargo run --example pixel
 ```
