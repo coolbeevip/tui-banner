@@ -3,7 +3,6 @@
 Cinematic ANSI banners for Rust CLI/TUI.
 
 ![banner](assets/banner.png)
-![banner2](assets/neon_gradient_neon_cyber.png)
 
 ## Features
 
