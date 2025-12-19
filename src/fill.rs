@@ -111,14 +111,14 @@ pub fn apply_fill(grid: &mut Grid, fill: Fill) {
                     Fill::Keep => {}
                     Fill::Pixel { block, dither } => {
                         cell.ch = block;
-                        if let Some(dither) = dither {
-                            if should_dither(r, c, dither.mode) {
-                                cell.ch = if (r + c) % 2 == 0 {
-                                    dither.dot
-                                } else {
-                                    dither.alt
-                                };
-                            }
+                        if let Some(dither) = dither
+                            && should_dither(r, c, dither.mode)
+                        {
+                            cell.ch = if (r + c) % 2 == 0 {
+                                dither.dot
+                            } else {
+                                dither.alt
+                            };
                         }
                     }
                 }
@@ -133,7 +133,7 @@ fn should_dither(row: usize, col: usize, mode: DitherMode) -> bool {
             if period == 0 {
                 false
             } else {
-                (row + col) % period as usize == 0
+                (row + col).is_multiple_of(period as usize)
             }
         }
         DitherMode::Noise { seed, threshold } => {

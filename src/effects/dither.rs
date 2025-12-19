@@ -37,7 +37,7 @@ fn should_dither(row: usize, col: usize, mode: DitherMode) -> bool {
             if period == 0 {
                 false
             } else {
-                (row + col) % period as usize == 0
+                (row + col).is_multiple_of(period as usize)
             }
         }
         DitherMode::Noise { seed, threshold } => {

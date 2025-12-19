@@ -330,10 +330,8 @@ fn clip_width(grid: &Grid, target: usize, align: Align) -> Grid {
     let mut out = Grid::new(grid.height(), target);
     for r in 0..grid.height() {
         for c in 0..target {
-            if let Some(cell) = grid.cell(r, start + c) {
-                if let Some(target_cell) = out.cell_mut(r, c) {
-                    *target_cell = cell.clone();
-                }
+            if let (Some(cell), Some(target_cell)) = (grid.cell(r, start + c), out.cell_mut(r, c)) {
+                *target_cell = cell.clone();
             }
         }
     }

@@ -75,10 +75,10 @@ impl Gradient {
                     }
                 };
 
-                if let Some(cell) = grid.cell_mut(r, c) {
-                    if cell.visible {
-                        cell.fg = Some(color_at(&self.stops, t));
-                    }
+                if let Some(cell) = grid.cell_mut(r, c)
+                    && cell.visible
+                {
+                    cell.fg = Some(color_at(&self.stops, t));
                 }
             }
         }

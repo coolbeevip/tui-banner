@@ -71,7 +71,7 @@ pub fn render_text(text: &str, font: &Font, kerning: usize, line_gap: usize) -> 
         for row in grid.rows() {
             let mut chars = row.iter().map(|cell| cell.ch).collect::<Vec<_>>();
             if chars.len() < max_width {
-                chars.extend(std::iter::repeat(' ').take(max_width - chars.len()));
+                chars.extend(std::iter::repeat_n(' ', max_width - chars.len()));
             }
             rows.push(chars);
         }
@@ -94,7 +94,7 @@ fn render_line(text: &str, font: &Font, kerning: usize) -> Grid {
         for (row_idx, row) in glyph.rows.iter().enumerate() {
             rows[row_idx].extend(row.iter().copied());
             if idx + 1 < chars.len() && kerning > 0 {
-                rows[row_idx].extend(std::iter::repeat(' ').take(kerning));
+                rows[row_idx].extend(std::iter::repeat_n(' ', kerning));
             }
         }
     }
