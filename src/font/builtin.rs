@@ -30,13 +30,7 @@ impl Glyph {
 
 const BLOCK_HEIGHT: usize = 5;
 
-const QUESTION_MARK: [&str; BLOCK_HEIGHT] = [
-    " ### ",
-    "#   #",
-    "  ## ",
-    "     ",
-    "  #  ",
-];
+const QUESTION_MARK: [&str; BLOCK_HEIGHT] = [" ### ", "#   #", "  ## ", "     ", "  #  "];
 
 const BLOCK_GLYPHS: &[(char, [&str; BLOCK_HEIGHT])] = &[
     (' ', ["     ", "     ", "     ", "     ", "     "]),

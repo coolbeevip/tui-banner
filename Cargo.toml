@@ -2,5 +2,9 @@
 name = "tui-banner"
 version = "0.1.0"
 edition = "2024"
+description = "Colorful ASCII art banner renderer for Rust CLI/TUI"
+readme = "README.md"
+documentation = "https://docs.rs/tui-banner"
+license = "Apache-2.0"
 
 [dependencies]

@@ -3,13 +3,16 @@ use std::collections::HashMap;
 use crate::grid::Grid;
 
 mod builtin;
+/// Figlet font parser.
 pub mod figlet;
 
+/// A single glyph as character rows.
 #[derive(Clone, Debug)]
 pub struct Glyph {
     rows: Vec<Vec<char>>,
 }
 
+/// Font containing glyphs and height.
 #[derive(Clone, Debug)]
 pub struct Font {
     height: usize,
@@ -18,34 +21,41 @@ pub struct Font {
 }
 
 impl Font {
+    /// Built-in 5x5 block font.
     pub fn block() -> Self {
         builtin::block_font()
     }
 
+    /// Built-in DOS Rebel (Figlet) font.
     pub fn dos_rebel() -> Self {
         figlet::parse(include_str!("../../assets/fonts/dosrebel.flf"))
             .unwrap_or_else(|_| builtin::block_font())
     }
 
+    /// Parse a Figlet `.flf` string into a font.
     pub fn from_figlet_str(data: &str) -> Result<Self, figlet::FigletError> {
         figlet::parse(data)
     }
 
+    /// Font height in rows.
     pub fn height(&self) -> usize {
         self.height
     }
 
+    /// Get glyph by character (falls back if missing).
     pub fn glyph(&self, ch: char) -> &Glyph {
         self.glyphs.get(&ch).unwrap_or(&self.fallback)
     }
 }
 
 impl Glyph {
+    /// Width of the glyph.
     pub fn width(&self) -> usize {
         self.rows.first().map(|r| r.len()).unwrap_or(0)
     }
 }
 
+/// Render text into a grid using a font.
 pub fn render_text(text: &str, font: &Font, kerning: usize, line_gap: usize) -> Grid {
     let lines: Vec<&str> = text.lines().collect();
     if lines.is_empty() {

@@ -1,14 +1,15 @@
 use crate::color::ColorMode;
-use crate::emit::emit_ansi;
 use crate::effects::dither::apply_dot_dither;
-use crate::effects::outline::{apply_edge_shade, EdgeShade};
-use crate::effects::shadow::{apply_shadow, Shadow};
-use crate::fill::{apply_fill, Dither, Fill};
-use crate::font::{render_text, Font};
+use crate::effects::outline::{EdgeShade, apply_edge_shade};
+use crate::effects::shadow::{Shadow, apply_shadow};
+use crate::emit::emit_ansi;
+use crate::fill::{Dither, Fill, apply_fill};
+use crate::font::{Font, render_text};
 use crate::gradient::Gradient;
 use crate::grid::{Align, Grid, Padding};
 use crate::terminal::detect_color_mode;
 
+/// High-level banner builder.
 #[derive(Clone, Debug)]
 pub struct Banner {
     text: String,
@@ -29,6 +30,7 @@ pub struct Banner {
 }
 
 impl Banner {
+    /// Create a banner from text.
     pub fn new(text: impl Into<String>) -> Self {
         Self {
             text: text.into(),
@@ -49,85 +51,102 @@ impl Banner {
         }
     }
 
+    /// Set the font.
     pub fn font(mut self, font: Font) -> Self {
         self.font = font;
         self
     }
 
+    /// Apply a gradient across the glyph grid.
     pub fn gradient(mut self, gradient: Gradient) -> Self {
         self.gradient = Some(gradient);
         self
     }
 
+    /// Fill visible cells (or keep glyph characters).
     pub fn fill(mut self, fill: Fill) -> Self {
         self.fill = fill;
         self
     }
 
+    /// Add a drop shadow.
     pub fn shadow(mut self, offset: (i32, i32), alpha: f32) -> Self {
         self.shadow = Some(Shadow { offset, alpha });
         self
     }
 
+    /// Add a 1-cell edge shade using a darker color and a dedicated character.
     pub fn edge_shade(mut self, darken: f32, ch: char) -> Self {
         self.edge_shade = Some(EdgeShade { ch, darken });
         self
     }
 
+    /// Enable dot dithering using a custom configuration.
     pub fn dot_dither(mut self, dither: Dither) -> Self {
         self.dot_dither = Some(dither);
         self
     }
 
+    /// Set the dither targets (glyphs to be replaced by dots).
     pub fn dot_dither_targets(mut self, targets: &[char]) -> Self {
         self.dot_dither_targets = Some(targets.to_vec());
         self
     }
 
+    /// Set the dither targets using a string (e.g. "░▒▓").
     pub fn dot_dither_targets_str(mut self, targets: &str) -> Self {
         self.dot_dither_targets = Some(targets.chars().collect());
         self
     }
 
+    /// Builder-style dot dithering configuration.
     pub fn dither(self) -> DotDitherBuilder {
         DotDitherBuilder::new(self)
     }
 
+    /// Align within the target width.
     pub fn align(mut self, align: Align) -> Self {
         self.align = align;
         self
     }
 
+    /// Add padding around the banner.
     pub fn padding<P: Into<Padding>>(mut self, padding: P) -> Self {
         self.padding = padding.into();
         self
     }
 
+    /// Force an output width (pads or clips).
     pub fn width(mut self, width: usize) -> Self {
         self.width = Some(width);
         self
     }
 
+    /// Clamp output width.
     pub fn max_width(mut self, width: usize) -> Self {
         self.max_width = Some(width);
         self
     }
 
+    /// Space between characters.
     pub fn kerning(mut self, kerning: usize) -> Self {
         self.kerning = kerning;
         self
     }
 
+    /// Blank lines between text lines.
     pub fn line_gap(mut self, line_gap: usize) -> Self {
         self.line_gap = line_gap;
         self
     }
 
+    /// Override color mode.
     pub fn color_mode(mut self, mode: ColorMode) -> Self {
         self.color_mode = mode;
         self
     }
 
+    /// Render to a `String` (ANSI escapes included if enabled).
     pub fn render(&self) -> String {
         let mut grid = render_text(&self.text, &self.font, self.kerning, self.line_gap);
         apply_fill(&mut grid, self.fill);
@@ -157,6 +176,7 @@ impl Banner {
     }
 }
 
+/// Builder for dot dithering over selected glyph targets.
 pub struct DotDitherBuilder {
     banner: Banner,
     targets: Vec<char>,
@@ -172,21 +192,25 @@ impl DotDitherBuilder {
         }
     }
 
+    /// Set glyphs to be replaced by dots.
     pub fn targets(mut self, targets: &str) -> Self {
         self.targets = targets.chars().collect();
         self
     }
 
+    /// Set glyphs to be replaced by dots.
     pub fn targets_vec(mut self, targets: &[char]) -> Self {
         self.targets = targets.to_vec();
         self
     }
 
+    /// Set dot characters (1 or 2 chars, e.g. "·:").
     pub fn dots(mut self, dots: &str) -> Self {
         self.dots = parse_dots(dots);
         self
     }
 
+    /// Apply a checkerboard-style dither.
     pub fn checker(mut self, period: u8) -> Banner {
         let dither = Dither {
             mode: crate::fill::DitherMode::Checker { period },
@@ -200,6 +224,7 @@ impl DotDitherBuilder {
         self.banner
     }
 
+    /// Apply a hash-noise dither.
     pub fn noise(mut self, seed: u32, threshold: u8) -> Banner {
         let dither = Dither {
             mode: crate::fill::DitherMode::Noise { seed, threshold },

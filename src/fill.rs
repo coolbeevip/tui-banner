@@ -1,30 +1,53 @@
 use crate::grid::Grid;
 
+/// Fill strategy for visible cells.
 #[derive(Clone, Copy, Debug)]
 pub enum Fill {
+    /// Replace visible cells with a single character.
     Solid(char),
+    /// Replace visible cells with `#`.
     Blocks,
+    /// Keep original glyph characters.
     Keep,
+    /// Pixel fill using a block character, with optional dot dithering.
     Pixel {
+        /// Block character to use.
         block: char,
+        /// Optional dither configuration.
         dither: Option<Dither>,
     },
 }
 
+/// Dot dither configuration.
 #[derive(Clone, Copy, Debug)]
 pub struct Dither {
+    /// Dither pattern.
     pub mode: DitherMode,
+    /// Primary dot character.
     pub dot: char,
+    /// Alternate dot character.
     pub alt: char,
 }
 
+/// Dither pattern selection.
 #[derive(Clone, Copy, Debug)]
 pub enum DitherMode {
-    Checker { period: u8 },
-    Noise { seed: u32, threshold: u8 },
+    /// Checkerboard pattern with period.
+    Checker {
+        /// Pattern period.
+        period: u8,
+    },
+    /// Hash-noise pattern with threshold.
+    Noise {
+        /// Noise seed.
+        seed: u32,
+        /// Threshold (0..=255).
+        threshold: u8,
+    },
 }
 
 impl Dither {
+    /// Checkerboard dither with dot characters (1 or 2 chars).
     pub fn checker(period: u8, dots: &str) -> Self {
         let (dot, alt) = parse_dots(dots);
         Self {
@@ -34,6 +57,7 @@ impl Dither {
         }
     }
 
+    /// Hash-noise dither with dot characters (1 or 2 chars).
     pub fn noise(seed: u32, threshold: u8, dots: &str) -> Self {
         let (dot, alt) = parse_dots(dots);
         Self {
@@ -45,14 +69,20 @@ impl Dither {
 }
 
 impl Fill {
+    /// Default block fill.
     pub fn default_blocks() -> Self {
         Fill::Blocks
     }
 
+    /// Pixel fill using a single block character.
     pub fn pixel(block: char) -> Self {
-        Fill::Pixel { block, dither: None }
+        Fill::Pixel {
+            block,
+            dither: None,
+        }
     }
 
+    /// Pixel fill with built-in dot dithering.
     pub fn pixel_with_dither(block: char, dither: Dither) -> Self {
         Fill::Pixel {
             block,
@@ -61,6 +91,7 @@ impl Fill {
     }
 }
 
+/// Apply fill to a grid in-place.
 pub fn apply_fill(grid: &mut Grid, fill: Fill) {
     let height = grid.height();
     let width = grid.width();

@@ -1,12 +1,16 @@
 use crate::color::Color;
 use crate::grid::Grid;
 
+/// Shadow configuration.
 #[derive(Clone, Copy, Debug)]
 pub struct Shadow {
+    /// Shadow offset (dx, dy).
     pub offset: (i32, i32),
+    /// Darken factor (0.0..1.0).
     pub alpha: f32,
 }
 
+/// Apply a drop shadow (darkened copy at offset).
 pub fn apply_shadow(grid: &Grid, shadow: Shadow) -> Grid {
     let (dx, dy) = shadow.offset;
     if dx == 0 && dy == 0 {

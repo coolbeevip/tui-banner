@@ -2,13 +2,18 @@ use std::collections::HashMap;
 
 use super::{Font, Glyph};
 
+/// Errors when parsing Figlet fonts.
 #[derive(Debug)]
 pub enum FigletError {
+    /// Header line is missing or invalid.
     InvalidHeader,
+    /// Not enough data for glyphs.
     MissingData,
+    /// Numeric field parse error.
     InvalidNumber,
 }
 
+/// Parse a Figlet `.flf` string into a font.
 pub fn parse(data: &str) -> Result<Font, FigletError> {
     let mut lines = data.lines();
     let header = lines.next().ok_or(FigletError::InvalidHeader)?;
@@ -32,10 +37,9 @@ pub fn parse(data: &str) -> Result<Font, FigletError> {
         glyphs.insert(code as char, Glyph { rows });
     }
 
-    let fallback = glyphs
-        .get(&'?')
-        .cloned()
-        .unwrap_or_else(|| Glyph { rows: vec![vec!['?'; 1]; height] });
+    let fallback = glyphs.get(&'?').cloned().unwrap_or_else(|| Glyph {
+        rows: vec![vec!['?'; 1]; height],
+    });
 
     Ok(Font {
         height,

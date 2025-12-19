@@ -1,36 +1,46 @@
 use crate::color::{Color, Palette};
 use crate::grid::Grid;
 
+/// Gradient definition for coloring a grid.
 #[derive(Clone, Debug)]
 pub struct Gradient {
     stops: Vec<Color>,
     direction: GradientDirection,
 }
 
+/// Gradient direction.
 #[derive(Clone, Copy, Debug)]
 pub enum GradientDirection {
+    /// Top to bottom.
     Vertical,
+    /// Left to right.
     Horizontal,
+    /// Top-left to bottom-right.
     Diagonal,
 }
 
 impl Gradient {
+    /// Create a gradient from color stops and direction.
     pub fn new(stops: Vec<Color>, direction: GradientDirection) -> Self {
         Self { stops, direction }
     }
 
+    /// Vertical gradient (top -> bottom).
     pub fn vertical(palette: Palette) -> Self {
         Self::new(palette.colors().to_vec(), GradientDirection::Vertical)
     }
 
+    /// Horizontal gradient (left -> right).
     pub fn horizontal(palette: Palette) -> Self {
         Self::new(palette.colors().to_vec(), GradientDirection::Horizontal)
     }
 
+    /// Diagonal gradient (top-left -> bottom-right).
     pub fn diagonal(palette: Palette) -> Self {
         Self::new(palette.colors().to_vec(), GradientDirection::Diagonal)
     }
 
+    /// Apply the gradient to a grid in-place.
     pub fn apply(&self, grid: &mut Grid) {
         if self.stops.is_empty() {
             return;

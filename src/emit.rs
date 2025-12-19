@@ -2,6 +2,7 @@ use crate::color::{Color, ColorMode};
 use crate::grid::Grid;
 use crate::terminal::detect_color_mode;
 
+/// Emit ANSI-colored output from a grid.
 pub fn emit_ansi(grid: &Grid, color_mode: ColorMode) -> String {
     let mode = match color_mode {
         ColorMode::Auto => detect_color_mode(),

@@ -1,6 +1,7 @@
 use crate::fill::{Dither, DitherMode};
 use crate::grid::Grid;
 
+/// Apply dot dithering over selected glyph targets.
 pub fn apply_dot_dither(grid: &Grid, dither: Dither, targets: &[char]) -> Grid {
     let mut out = grid.clone();
     let height = out.height();
@@ -8,7 +9,9 @@ pub fn apply_dot_dither(grid: &Grid, dither: Dither, targets: &[char]) -> Grid {
 
     for r in 0..height {
         for c in 0..width {
-            let Some(cell) = out.cell_mut(r, c) else { continue };
+            let Some(cell) = out.cell_mut(r, c) else {
+                continue;
+            };
             if !cell.visible {
                 continue;
             }
@@ -16,7 +19,11 @@ pub fn apply_dot_dither(grid: &Grid, dither: Dither, targets: &[char]) -> Grid {
                 continue;
             }
             if should_dither(r, c, dither.mode) {
-                cell.ch = if (r + c) % 2 == 0 { dither.dot } else { dither.alt };
+                cell.ch = if (r + c) % 2 == 0 {
+                    dither.dot
+                } else {
+                    dither.alt
+                };
             }
         }
     }

@@ -1,12 +1,16 @@
 use crate::color::Color;
 use crate::grid::Grid;
 
+/// Edge shading configuration.
 #[derive(Clone, Copy, Debug)]
 pub struct EdgeShade {
+    /// Character used for the edge.
     pub ch: char,
+    /// Darken factor (0.0..1.0).
     pub darken: f32,
 }
 
+/// Add a 1-cell shaded edge around visible cells.
 pub fn apply_edge_shade(grid: &Grid, shade: EdgeShade) -> Grid {
     let mut out = grid.clone();
     let height = grid.height();
@@ -14,7 +18,9 @@ pub fn apply_edge_shade(grid: &Grid, shade: EdgeShade) -> Grid {
 
     for r in 0..height {
         for c in 0..width {
-            let Some(cell) = grid.cell(r, c) else { continue };
+            let Some(cell) = grid.cell(r, c) else {
+                continue;
+            };
             if !cell.visible {
                 continue;
             }
@@ -26,7 +32,9 @@ pub fn apply_edge_shade(grid: &Grid, shade: EdgeShade) -> Grid {
                 }
                 let nr = nr as usize;
                 let nc = nc as usize;
-                let Some(target) = out.cell_mut(nr, nc) else { continue };
+                let Some(target) = out.cell_mut(nr, nc) else {
+                    continue;
+                };
                 if target.visible {
                     continue;
                 }

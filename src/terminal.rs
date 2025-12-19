@@ -2,6 +2,7 @@ use std::env;
 
 use crate::color::ColorMode;
 
+/// Detect terminal color capability.
 pub fn detect_color_mode() -> ColorMode {
     if env::var("NO_COLOR").is_ok() {
         return ColorMode::NoColor;
