@@ -22,10 +22,9 @@ pub struct Font {
 impl Font {
     /// Built-in DOS Rebel (Figlet) font.
     ///
-    /// Panics if the bundled font data is invalid.
-    pub fn dos_rebel() -> Self {
+    /// Returns an error if the bundled font data is invalid.
+    pub fn dos_rebel() -> Result<Self, figlet::FigletError> {
         figlet::parse(include_str!("../../assets/fonts/dosrebel.flf"))
-            .expect("Bundled dosrebel.flf must be a valid Figlet font")
     }
 
     /// Parse a Figlet `.flf` string into a font.

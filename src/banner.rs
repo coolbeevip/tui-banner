@@ -4,7 +4,7 @@ use crate::effects::outline::{EdgeShade, apply_edge_shade};
 use crate::effects::shadow::{Shadow, apply_shadow};
 use crate::emit::emit_ansi;
 use crate::fill::{Dither, Fill, apply_fill};
-use crate::font::{Font, render_text};
+use crate::font::{self, Font, render_text};
 use crate::gradient::Gradient;
 use crate::grid::{Align, Grid, Padding};
 use crate::terminal::detect_color_mode;
@@ -29,12 +29,37 @@ pub struct Banner {
     color_mode: ColorMode,
 }
 
+/// Errors returned when building a banner.
+#[derive(Debug)]
+pub enum BannerError {
+    /// Failed to parse the bundled Figlet font.
+    Font(font::figlet::FigletError),
+}
+
+impl std::fmt::Display for BannerError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            BannerError::Font(err) => write!(f, "font parse error: {err:?}"),
+        }
+    }
+}
+
+impl std::error::Error for BannerError {}
+
+impl From<font::figlet::FigletError> for BannerError {
+    fn from(err: font::figlet::FigletError) -> Self {
+        BannerError::Font(err)
+    }
+}
+
 impl Banner {
     /// Create a banner from text.
-    pub fn new(text: impl Into<String>) -> Self {
-        Self {
+    ///
+    /// Returns an error if the bundled font cannot be parsed.
+    pub fn new(text: impl Into<String>) -> Result<Self, BannerError> {
+        Ok(Self {
             text: text.into(),
-            font: Font::dos_rebel(),
+            font: Font::dos_rebel()?,
             gradient: None,
             fill: Fill::Blocks,
             shadow: None,
@@ -48,7 +73,7 @@ impl Banner {
             kerning: 1,
             line_gap: 0,
             color_mode: ColorMode::Auto,
-        }
+        })
     }
 
     /// Set the font.
@@ -188,7 +213,7 @@ impl DotDitherBuilder {
         Self {
             banner,
             targets: vec!['░', '▒'],
-            dots: ('·', ':'),
+            dots: ('░', '░'),
         }
     }
 

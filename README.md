@@ -25,11 +25,41 @@ tui-banner = { path = "." }
 ## Quick Start / 快速开始
 
 ```rust
-use tui_banner::{Align, Banner, Fill, Font, Gradient, Palette};
+use tui_banner::{Align, Banner, Fill, Gradient, Palette};
 
 fn main() {
-    let banner = Banner::new("RUST CLI")
-        .font(Font::dos_rebel())
+    let banner = match Banner::new("RUST CLI") {
+        Ok(banner) => banner
+            .gradient(Gradient::vertical(Palette::from_hex(&[
+                "#00E5FF",
+                "#7B5CFF",
+                "#FF5AD9",
+            ])))
+            .fill(Fill::Keep)
+            .dither()
+            .targets("░▒▓")
+            .dots("·:")
+            .checker(3)
+            .align(Align::Center)
+            .padding(1)
+            .render(),
+        Err(err) => {
+            eprintln!("tui-banner: {err}");
+            String::new()
+        }
+    };
+
+    println!("{banner}");
+}
+```
+
+Alternatively, use `?` and return a `Result` from `main`:
+
+```rust
+use tui_banner::{Align, Banner, Fill, Gradient, Palette};
+
+fn main() -> Result<(), tui_banner::BannerError> {
+    let banner = Banner::new("RUST CLI")?
         .gradient(Gradient::vertical(Palette::from_hex(&[
             "#00E5FF",
             "#7B5CFF",
@@ -45,6 +75,7 @@ fn main() {
         .render();
 
     println!("{banner}");
+    Ok(())
 }
 ```
 
@@ -52,8 +83,8 @@ fn main() {
 
 ### Banner（高层 API）
 
-- `Banner::new(text)`
-- `font(Font::dos_rebel() | Font::from_figlet_str(...))`
+- `Banner::new(text) -> Result<Banner, BannerError>`
+- `font(Font::dos_rebel()? | Font::from_figlet_str(...))`
 - `gradient(Gradient::vertical | horizontal | diagonal)`
 - `fill(Fill::Keep | Fill::Blocks | Fill::Pixel { ... })`
 - `dither().targets("░▒").dots("·:").checker(k)`
@@ -72,7 +103,7 @@ fn main() {
 ## Dither Builder / 点阵 Builder
 
 ```rust
-Banner::new("HELLO")
+Banner::new("HELLO")?
     .fill(Fill::Keep)
     .dither()
     .targets("░▒▓")
@@ -91,13 +122,25 @@ Patterns / 模式:
 内置 DOS Rebel 字体： / Bundled DOS Rebel:
 
 ```rust
-Font::dos_rebel()
+Font::dos_rebel()?
 ```
 
 加载任意 Figlet `.flf`： / Load any Figlet `.flf`:
 
 ```rust
 let font = Font::from_figlet_str(flf_str)?;
+```
+
+## Examples / 示例
+
+运行示例： / Run examples:
+
+```bash
+cargo run --example basic
+cargo run --example effects
+cargo run --example multiline
+cargo run --example no_color
+cargo run --example pixel
 ```
 
 ## Color Modes / 颜色模式

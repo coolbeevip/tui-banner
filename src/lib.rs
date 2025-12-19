@@ -3,10 +3,11 @@
 //!
 //! ## Quick Start
 //! ```rust
-//! use tui_banner::{Align, Banner, Fill, Font, Gradient, Palette};
+//! use tui_banner::{Align, Banner, Fill, Gradient, Palette};
 //!
-//! let banner = Banner::new("RUST CLI")
-//!     .font(Font::dos_rebel())
+//! # fn main() -> Result<(), tui_banner::BannerError> {
+//!
+//! let banner = Banner::new("RUST CLI")?
 //!     .gradient(Gradient::vertical(Palette::from_hex(&[
 //!         "#00E5FF",
 //!         "#7B5CFF",
@@ -22,6 +23,8 @@
 //!     .render();
 //!
 //! let _ = banner;
+//! # Ok(())
+//! # }
 //! ```
 
 /// High-level banner builder API.
@@ -43,7 +46,7 @@ pub mod grid;
 /// Terminal capability detection.
 pub mod terminal;
 
-pub use banner::Banner;
+pub use banner::{Banner, BannerError};
 pub use color::{Color, ColorMode, Palette};
 pub use effects::outline::EdgeShade;
 pub use fill::{Dither, DitherMode, Fill};

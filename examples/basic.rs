@@ -9,6 +9,7 @@ fn main() {
             .fill(Fill::Keep)
             .dither()
             .targets("░▒▓")
+            .dots("·:")
             .checker(3)
             .align(Align::Center)
             .padding(1)
