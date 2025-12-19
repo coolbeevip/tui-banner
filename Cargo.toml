@@ -6,5 +6,12 @@ description = "Colorful ASCII art banner renderer for Rust CLI/TUI"
 readme = "README_CRATES.md"
 documentation = "https://docs.rs/tui-banner"
 license = "Apache-2.0"
+repository = "https://github.com/coolbeevip/tui-banner"
+homepage = "https://tui-banner-website.pages.dev/"
+authors = ["Lei Zhang <coolbeevip@gmail.com>"]
+keywords = ["tui", "banner", "ascii-art", "cli", "terminal"]
+categories = ["command-line-interface", "text-processing"]
+rust-version = "1.85"
+exclude = ["assets/*", "examples/*"]
 
 [dependencies]
