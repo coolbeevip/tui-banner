@@ -1,12 +1,10 @@
-# Contributing / 贡献指南
+# Contributing
 
-Thanks for contributing! This project uses pre-commit hooks and license headers.
-
-感谢贡献！本项目启用了 pre-commit 钩子和 License Header 检查。
+Thanks for contributing! This project uses pre-commit hooks and license header checks.
 
 ---
 
-## Quick Setup / 快速设置
+## Quick Setup
 
 ```bash
 # Install pre-commit
@@ -17,7 +15,7 @@ pipx install pre-commit
 pre-commit install --hook-type pre-commit --hook-type pre-push
 ```
 
-## Required Checks / 必须通过的检查
+## Required Checks
 
 Pre-commit hooks run automatically on commit/push:
 
@@ -32,19 +30,19 @@ You can run them manually:
 pre-commit run --all-files
 ```
 
-## Code Style / 代码风格
+## Code Style
 
 - Format with `cargo fmt`.
 - Avoid introducing unused dependencies.
 - Keep APIs documented (rustdoc is required).
 
-## Reporting Issues / 提交问题
+## Reporting Issues
 
 - Provide steps to reproduce.
 - Include Rust version and OS.
 - Attach logs or error messages when possible.
 
-## Pull Requests / 提交 PR
+## Pull Requests
 
 - Keep changes focused and small.
 - Update docs and examples for public API changes.
