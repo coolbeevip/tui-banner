@@ -2,8 +2,6 @@
 
 Cinematic ANSI banners for Rust CLI/TUI.
 
-![banner](assets/banner.png)
-
 ## Features
 
 - Grid-first rendering pipeline
@@ -12,6 +10,39 @@ Cinematic ANSI banners for Rust CLI/TUI.
 - Gradients, pixel fill, dithering, shadows, edge shading
 - Named style and palette presets
 - Fluent builder API
+
+## Color Gallery
+
+<table>
+  <tr>
+    <td align="center"><strong>Neon Cyber</strong><br><img src="assets/banner.png" alt="Neon Cyber" width="360"></td>
+    <td align="center"><strong>Arctic Tech</strong><br><img src="assets/banner.png" alt="Arctic Tech" width="360"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Aurora Flux</strong><br><img src="assets/banner.png" alt="Aurora Flux" width="360"></td>
+    <td align="center"><strong>Deep Space</strong><br><img src="assets/banner.png" alt="Deep Space" width="360"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Ocean Flow</strong><br><img src="assets/banner.png" alt="Ocean Flow" width="360"></td>
+    <td align="center"><strong>Sunset Neon</strong><br><img src="assets/banner.png" alt="Sunset Neon" width="360"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Fire Warning</strong><br><img src="assets/banner.png" alt="Fire Warning" width="360"></td>
+    <td align="center"><strong>Warm Luxury</strong><br><img src="assets/banner.png" alt="Warm Luxury" width="360"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Forest Sky</strong><br><img src="assets/banner.png" alt="Forest Sky" width="360"></td>
+    <td align="center"><strong>Earth Tone</strong><br><img src="assets/banner.png" alt="Earth Tone" width="360"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Chrome</strong><br><img src="assets/banner.png" alt="Chrome" width="360"></td>
+    <td align="center"><strong>Royal Purple</strong><br><img src="assets/banner.png" alt="Royal Purple" width="360"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>CRT Amber</strong><br><img src="assets/banner.png" alt="CRT Amber" width="360"></td>
+    <td align="center"><strong>Matrix</strong><br><img src="assets/banner.png" alt="Matrix" width="360"></td>
+  </tr>
+</table>
 
 ## Quick Start
 
