@@ -63,12 +63,6 @@ fn main() -> Result<(), tui_banner::BannerError> {
 }
 ```
 
-Run it with:
-
-```bash
-cargo run --example gradient_custom
-```
-
 ## Light Sweep Animation
 
 ```rust
@@ -89,12 +83,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 ```
 
 Tip: pass `Some(Color::Rgb(...))` as the second argument to tint the sweep.
-
-Run it with:
-
-```bash
-cargo run --example light_sweep
-```
 
 ![Light Sweep Animation](assets/images/light_sweep.gif)
 
@@ -160,6 +148,25 @@ cargo run --example light_sweep
     <td><img alt="Dither Sparkle Noise" src="assets/images/dither_sparkle_noise.png" /></td>
   </tr>
 </table>
+
+## CLI Usage
+
+```bash
+tui-banner "HELLO" --style neon-cyber --align center --padding 1
+tui-banner --text "HELLO" --gradient diagonal --palette "#00E5FF,#7B5CFF,#FF5AD9"
+tui-banner "HELLO" --animate-sweep 3 --sweep-highlight "#DCEBFF"
+```
+
+Defaults (CLI):
+- Text: "RUST CLI" (when no positional text or `--text`)
+- Gradient: diagonal
+- Palette: #00E5FF, #3A7BFF, #E6F6FF
+- Fill: keep
+- Dither targets: ░▒▓ (when dither enabled)
+- Padding: 1
+- Align: center
+- Color mode: truecolor
+- Sweep highlight: white
 
 ## Examples
 
