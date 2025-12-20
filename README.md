@@ -1,13 +1,12 @@
+![Neon Cyber](assets/images/neon_gradient_neon_cyber.png)
 # tui-banner
 
 Cinematic ANSI banners for Rust CLI/TUI.
-
 Website: https://tui-banner-website.pages.dev/
 
-## Gallery
-
-![Neon Cyber](assets/images/neon_gradient_neon_cyber.png)
-![Sunset Neon](assets/images/neon_gradient_sunset_neon.png)
+[![Crates.io](https://img.shields.io/crates/v/tui-banner.svg)](https://crates.io/crates/tui-banner)
+[![Docs.rs](https://docs.rs/tui-banner/badge.svg)](https://docs.rs/tui-banner/)
+[![License](https://img.shields.io/crates/l/tui-banner.svg)](https://crates.io/crates/tui-banner)
 
 ## Features
 
