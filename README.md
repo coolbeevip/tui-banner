@@ -6,7 +6,7 @@ Cinematic ANSI banners for Rust CLI/TUI.
 [![Docs.rs](https://docs.rs/tui-banner/badge.svg)](https://docs.rs/tui-banner/)
 [![License](https://img.shields.io/crates/l/tui-banner.svg)](https://crates.io/crates/tui-banner)
 
-![banner example](assets/images/gradient_diagonal.png)
+![banner example](assets/images/banner.png)
 
 ## Features
 
