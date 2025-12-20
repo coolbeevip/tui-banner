@@ -48,6 +48,12 @@ fn main() -> Result<(), tui_banner::BannerError> {
 | --- | --- | --- | --- |
 | ![Full Block](assets/images/full_block.png) | ![Full Half Block](assets/images/full_half_block.png) | ![Full Light Shade](assets/images/full_light_shade.png) | ![Full Char](assets/images/full_char.png) |
 
+## Dither Gallery
+
+| Checker Stipple | Coarse Halftone | Film Grain | Sparkle Noise |
+| --- | --- | --- | --- |
+| ![Dither Checker Stipple](assets/images/dither_checker_stipple.png) | ![Dither Coarse Halftone](assets/images/dither_coarse_halftone.png) | ![Dither Film Grain](assets/images/dither_film_grain.png) | ![Dither Sparkle Noise](assets/images/dither_sparkle_noise.png) |
+
 ## Examples
 
 ```bash
@@ -65,4 +71,8 @@ cargo run --example gradient_chrome
 cargo run --example gradient_royal_purple
 cargo run --example gradient_crt_amber
 cargo run --example gradient_matrix
+cargo run --example dither_checker_stipple
+cargo run --example dither_coarse_halftone
+cargo run --example dither_film_grain
+cargo run --example dither_sparkle_noise
 ```

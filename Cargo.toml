@@ -1,6 +1,6 @@
 [package]
 name = "tui-banner"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2024"
 description = "Colorful ASCII art banner renderer for Rust CLI/TUI"
 readme = "README_CRATES.md"
