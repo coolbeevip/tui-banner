@@ -80,6 +80,11 @@ impl LightSweep {
 
 /// Apply a highlight sweep in-place.
 pub fn apply_light_sweep(grid: &mut Grid, sweep: LightSweep) {
+    apply_light_sweep_tint(grid, sweep, Color::Rgb(255, 255, 255));
+}
+
+/// Apply a highlight sweep in-place with a custom highlight color.
+pub fn apply_light_sweep_tint(grid: &mut Grid, sweep: LightSweep, highlight: Color) {
     let height = grid.height().max(1);
     let width = grid.width().max(1);
 
@@ -115,7 +120,7 @@ pub fn apply_light_sweep(grid: &mut Grid, sweep: LightSweep) {
             }
 
             if let Some(color) = cell.fg {
-                cell.fg = Some(brighten(color, amount));
+                cell.fg = Some(blend_to(color, highlight, amount));
             }
         }
     }
@@ -154,6 +159,6 @@ fn axis_t(direction: SweepDirection, row: usize, col: usize, width: usize, heigh
     }
 }
 
-fn brighten(color: Color, amount: f32) -> Color {
-    color.lerp(Color::Rgb(255, 255, 255), amount)
+fn blend_to(color: Color, target: Color, amount: f32) -> Color {
+    color.lerp(target, amount)
 }

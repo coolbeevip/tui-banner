@@ -21,6 +21,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .align(Align::Center)
         .padding(1);
 
-    banner.animate_sweep(5)?;
+    banner.animate_sweep(5, Some(tui_banner::Color::Rgb(255, 210, 120)))?;
     Ok(())
 }

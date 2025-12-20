@@ -71,7 +71,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .align(Align::Center)
         .padding(1);
 
-    banner.animate_sweep(5)?;
+    banner.animate_sweep(5, None)?;
     Ok(())
 }
 ```
+
+Tip: pass `Some(Color::Rgb(...))` as the second argument to tint the sweep.

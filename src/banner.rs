@@ -14,10 +14,10 @@ use std::io::{self, Write};
 use std::thread;
 use std::time::Duration;
 
-use crate::color::ColorMode;
 use crate::color::Palette;
+use crate::color::{Color, ColorMode};
 use crate::effects::dither::apply_dot_dither;
-use crate::effects::light_sweep::{LightSweep, SweepDirection, apply_light_sweep};
+use crate::effects::light_sweep::{LightSweep, SweepDirection, apply_light_sweep_tint};
 use crate::effects::outline::{EdgeShade, apply_edge_shade};
 use crate::effects::shadow::{Shadow, apply_shadow};
 use crate::emit::emit_ansi;
@@ -208,19 +208,21 @@ impl Banner {
 
     /// Render to a `String` (ANSI escapes included if enabled).
     pub fn render(&self) -> String {
-        self.render_with_sweep(None)
+        self.render_with_sweep(None, None)
     }
 
     /// Animate a light sweep over the banner.
     ///
     /// `speed_ms` controls the delay between frames in milliseconds.
-    pub fn animate_sweep(&self, speed_ms: u64) -> io::Result<()> {
+    /// `highlight` overrides the sweep color (use `None` for white).
+    pub fn animate_sweep(&self, speed_ms: u64, highlight: Option<Color>) -> io::Result<()> {
         let mut stdout = io::stdout();
         write!(stdout, "\x1b[2J\x1b[?25l")?;
         stdout.flush()?;
 
         let frames = 180;
         let frame_time = Duration::from_millis(speed_ms);
+        let highlight = highlight.unwrap_or(Color::Rgb(255, 255, 255));
         for frame in 0..frames {
             let t = frame as f32 / frames as f32;
             let center = -0.25 + t * 1.5;
@@ -230,7 +232,7 @@ impl Banner {
                 .intensity(0.9)
                 .softness(2.5);
 
-            let banner = self.render_with_sweep(Some(sweep));
+            let banner = self.render_with_sweep(Some(sweep), Some(highlight));
             write!(stdout, "\x1b[H{banner}")?;
             stdout.flush()?;
             thread::sleep(frame_time);
@@ -240,14 +242,19 @@ impl Banner {
         Ok(())
     }
 
-    fn render_with_sweep(&self, sweep_override: Option<LightSweep>) -> String {
+    fn render_with_sweep(
+        &self,
+        sweep_override: Option<LightSweep>,
+        highlight: Option<Color>,
+    ) -> String {
         let mut grid = render_text(&self.text, &self.font, self.kerning, self.line_gap);
         apply_fill(&mut grid, self.fill);
         if let Some(gradient) = &self.gradient {
             gradient.apply(&mut grid);
         }
         if let Some(sweep) = sweep_override.or(self.light_sweep) {
-            apply_light_sweep(&mut grid, sweep);
+            let highlight = highlight.unwrap_or(Color::Rgb(255, 255, 255));
+            apply_light_sweep_tint(&mut grid, sweep, highlight);
         }
         if let Some(dither) = self.dot_dither {
             let default_targets = ['░', '▒'];
