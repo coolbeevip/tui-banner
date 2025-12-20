@@ -36,6 +36,32 @@ fn main() -> Result<(), tui_banner::BannerError> {
 }
 ```
 
+## Custom Gradient Example
+
+```rust
+use tui_banner::{Align, Banner, ColorMode, Fill, Gradient, Palette};
+
+fn main() -> Result<(), tui_banner::BannerError> {
+    let banner = Banner::new("RUST CLI")?
+        .color_mode(ColorMode::TrueColor)
+        .gradient(Gradient::vertical(Palette::from_hex(&[
+            "#00E5FF", // cyan
+            "#3A7BFF", // blue
+            "#E6F6FF", // ice
+        ])))
+        .fill(Fill::Keep)
+        .dither()
+        .targets("░▒▓")
+        .checker(3)
+        .align(Align::Center)
+        .padding(1)
+        .render();
+
+    println!("{banner}");
+    Ok(())
+}
+```
+
 ## Gradient Gallery
 
 | Vertical | Horizontal | Diagonal | Apply |
