@@ -236,7 +236,7 @@ impl Banner {
             thread::sleep(frame_time);
         }
 
-        write!(stdout, "\x1b[?25h\n")?;
+        writeln!(stdout, "\x1b[?25h")?;
         Ok(())
     }
 
