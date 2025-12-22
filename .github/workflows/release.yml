@@ -23,9 +23,6 @@ jobs:
           - os: macos-14
             target: aarch64-apple-darwin
             archive: tar.gz
-          - os: macos-15
-            target: aarch64-apple-darwin
-            archive: tar.gz
           - os: windows-latest
             target: x86_64-pc-windows-msvc
             archive: zip
@@ -75,6 +72,7 @@ jobs:
         with:
           name: release-${{ matrix.target }}
           path: dist/*
+          overwrite: true
 
   release:
     needs: build
