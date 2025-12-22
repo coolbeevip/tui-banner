@@ -154,10 +154,9 @@ Tip: pass `Some(Color::Rgb(...))` as the second argument to tint the sweep.
 Install the CLI (binary name: `tui-banner`):
 
 ```bash
-cargo install tui-banner-cli
+Download the prebuilt binary from GitHub Releases and place it on your PATH:
+https://github.com/coolbeevip/tui-banner/releases
 ```
-
-Or download a prebuilt binary from GitHub Releases (macOS/Linux/Windows) and place it on your PATH.
 
 ```bash
 tui-banner
