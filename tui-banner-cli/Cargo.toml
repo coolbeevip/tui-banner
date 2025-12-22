@@ -1,10 +1,8 @@
 [package]
-name = "tui-banner"
+name = "tui-banner-cli"
 version = "0.2.0"
 edition = "2024"
-description = "Colorful ASCII art banner renderer for Rust CLI/TUI"
-readme = "README_CRATES.md"
-documentation = "https://docs.rs/tui-banner"
+description = "CLI for tui-banner"
 license = "Apache-2.0"
 repository = "https://github.com/coolbeevip/tui-banner"
 homepage = "https://tui-banner-website.pages.dev/"
@@ -12,9 +10,10 @@ authors = ["Lei Zhang <coolbeevip@gmail.com>"]
 keywords = ["tui", "banner", "ascii-art", "cli", "terminal"]
 categories = ["command-line-interface", "text-processing"]
 rust-version = "1.87"
-exclude = ["assets/images/*", "examples/*", "tui-banner-cli/*", ".github/*", ".pre-commit-config.yaml", ".gitignore", "LICENSE_HEADER.txt", "README.md", "CONTRIBUTING.md"]
 
 [dependencies]
+tui-banner = { version = "0.2.0", path = ".." }
 
-[workspace]
-members = ["tui-banner-cli"]
+[[bin]]
+name = "tui-banner"
+path = "src/main.rs"

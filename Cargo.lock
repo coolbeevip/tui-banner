@@ -5,3 +5,10 @@ version = 4
 [[package]]
 name = "tui-banner"
 version = "0.2.0"
+
+[[package]]
+name = "tui-banner-cli"
+version = "0.2.0"
+dependencies = [
+ "tui-banner",
+]

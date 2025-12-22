@@ -11,6 +11,15 @@ Cinematic ANSI banners for Rust CLI/TUI.
 - Named style and palette presets
 - Fluent builder API
 
+CLI note: the command-line tool is published separately as `tui-banner-cli` (binary name: `tui-banner`).
+
+CLI Usage:
+
+```bash
+tui-banner
+tui-banner --text "HELLO WORLD"
+```
+
 ## Quick Start
 
 ```toml

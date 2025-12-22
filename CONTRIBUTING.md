@@ -8,6 +8,13 @@ Thanks for contributing! This project uses pre-commit hooks and license header c
 
 ```bash
 # Install pre-commit
+# (use pipx or pip as you prefer)
+
+# Install hooks via Makefile
+make setup
+
+# Or manually:
+# Install pre-commit
 pipx install pre-commit
 # or: pip install pre-commit
 
@@ -17,33 +24,13 @@ pre-commit install --hook-type pre-commit --hook-type pre-push
 
 ## Required Checks
 
-Pre-commit hooks run automatically on commit/push:
+Pre-commit hooks run automatically on commit/push (or use `make lint` to run them all):
 
-- `cargo fmt --check`
-- `cargo check`
-- `cargo clippy -- -D warnings`
-- `cargo test`
+See `.pre-commit-config.yaml` for the full list of checks.
 
 You can run them manually:
 
 ```bash
-pre-commit run --all-files
+make lint
+# or: pre-commit run --all-files
 ```
-
-## Code Style
-
-- Format with `cargo fmt`.
-- Avoid introducing unused dependencies.
-- Keep APIs documented (rustdoc is required).
-
-## Reporting Issues
-
-- Provide steps to reproduce.
-- Include Rust version and OS.
-- Attach logs or error messages when possible.
-
-## Pull Requests
-
-- Keep changes focused and small.
-- Update docs and examples for public API changes.
-- Ensure tests and pre-commit checks pass.

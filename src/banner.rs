@@ -223,14 +223,18 @@ impl Banner {
         let frames = 180;
         let frame_time = Duration::from_millis(speed_ms);
         let highlight = highlight.unwrap_or(Color::Rgb(255, 255, 255));
-        for frame in 0..frames {
-            let t = frame as f32 / frames as f32;
-            let center = -0.25 + t * 1.5;
-            let sweep = LightSweep::new(SweepDirection::DiagonalDown)
-                .center(center)
+        let base = self.light_sweep.unwrap_or_else(|| {
+            LightSweep::new(SweepDirection::DiagonalDown)
                 .width(0.25)
                 .intensity(0.9)
-                .softness(2.5);
+                .softness(2.5)
+        });
+        let start = base.center - 0.75;
+        let end = base.center + 0.75;
+        for frame in 0..frames {
+            let t = frame as f32 / frames as f32;
+            let center = start + t * (end - start);
+            let sweep = base.center(center);
 
             let banner = self.render_with_sweep(Some(sweep), Some(highlight));
             write!(stdout, "\x1b[H{banner}")?;

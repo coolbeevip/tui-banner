@@ -151,14 +151,26 @@ Tip: pass `Some(Color::Rgb(...))` as the second argument to tint the sweep.
 
 ## CLI Usage
 
+Install the CLI (binary name: `tui-banner`):
+
 ```bash
-tui-banner "HELLO" --style neon-cyber --align center --padding 1
-tui-banner --text "HELLO" --gradient diagonal --palette "#00E5FF,#7B5CFF,#FF5AD9"
-tui-banner "HELLO" --animate-sweep 3 --sweep-highlight "#DCEBFF"
+cargo install tui-banner-cli
+```
+
+```bash
+tui-banner
+tui-banner --text "HELLO WORLD"
+tui-banner --text "HELLO WORLD" --style neon-cyber
+tui-banner --text "HELLO WORLD" --gradient diagonal --palette "#00E5FF,#7B5CFF,#FF5AD9"
+tui-banner --text "HELLO WORLD" --animate-sweep 3 --sweep-highlight "#DCEBFF"
+tui-banner --text "HELLO WORLD" --animate-sweep 3 --sweep-highlight "#DCEBFF" --sweep-direction horizontal
+tui-banner --text "HELLO WORLD" --animate-sweep 3 \
+    --sweep-direction diagonal-up --sweep-width 0.3 --sweep-intensity 0.9 \
+    --sweep-softness 2.5 --sweep-center 0.4 --sweep-highlight "#DCEBFF"
 ```
 
 Defaults (CLI):
-- Text: "RUST CLI" (when no positional text or `--text`)
+- `--text` is required
 - Gradient: diagonal
 - Palette: #00E5FF, #3A7BFF, #E6F6FF
 - Fill: keep
