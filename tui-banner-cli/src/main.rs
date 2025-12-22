@@ -24,7 +24,6 @@ const DEFAULT_PALETTE: [&str; 3] = ["#00E5FF", "#3A7BFF", "#E6F6FF"];
 #[derive(Default)]
 struct CliOptions {
     text_flag: Option<String>,
-    text_positional: Vec<String>,
     font: Option<PathBuf>,
     style: Option<Style>,
     preset: Option<Preset>,
@@ -178,6 +177,11 @@ fn parse_args() -> Result<CliOptions, String> {
     let mut opts = CliOptions::default();
     let args: Vec<String> = env::args().skip(1).collect();
     let mut index = 0;
+
+    if args.is_empty() {
+        print_help();
+        std::process::exit(0);
+    }
 
     while index < args.len() {
         let arg = &args[index];
@@ -344,7 +348,9 @@ fn parse_args() -> Result<CliOptions, String> {
                 _ => return Err(format!("unknown flag: {flag}")),
             }
         } else {
-            opts.text_positional.push(arg.clone());
+            return Err(format!(
+                "unexpected positional argument: {arg}. Use `--text`"
+            ));
         }
         index += 1;
     }
@@ -354,16 +360,9 @@ fn parse_args() -> Result<CliOptions, String> {
 }
 
 fn resolve_text(opts: &CliOptions) -> Result<String, String> {
-    if opts.text_flag.is_some() && !opts.text_positional.is_empty() {
-        return Err("provide text either via `--text` or positional arguments".to_string());
-    }
-    if let Some(text) = &opts.text_flag {
-        return Ok(text.clone());
-    }
-    if !opts.text_positional.is_empty() {
-        return Ok(opts.text_positional.join(" "));
-    }
-    Ok("RUST CLI".to_string())
+    opts.text_flag
+        .clone()
+        .ok_or_else(|| "`--text` is required".to_string())
 }
 
 fn resolve_gradient(opts: &CliOptions) -> Result<Option<Gradient>, String> {
@@ -497,11 +496,6 @@ fn build_sweep(opts: &CliOptions) -> Result<LightSweep, String> {
 }
 
 fn validate_options(opts: &CliOptions) -> Result<(), String> {
-    if opts.animate_sweep.is_some() && should_apply_sweep(opts) {
-        return Err(
-            "`--animate-sweep` cannot be combined with static light sweep options".to_string(),
-        );
-    }
     if opts.sweep_highlight.is_some() && opts.animate_sweep.is_none() {
         return Err("`--sweep-highlight` requires `--animate-sweep`".to_string());
     }
@@ -774,10 +768,10 @@ fn normalize(value: &str) -> String {
 
 fn print_help() {
     println!(
-        r#"tui-banner [TEXT] [options]
+        r#"tui-banner --text <TEXT> [options]
 
 Options:
-  --text <TEXT>                 Banner text (fallback to positional TEXT, default: "RUST CLI")
+  --text <TEXT>                 Banner text (required)
   --font <PATH>                 Figlet .flf font file
   --style <STYLE>               neon-cyber | arctic-tech | sunset-neon | forest-sky | chrome
                                 crt-amber | ocean-flow | deep-space | fire-warning | warm-luxury
