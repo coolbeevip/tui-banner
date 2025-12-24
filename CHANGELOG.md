@@ -1,8 +1,13 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
-
 ## [0.2.3]
+### Added
+- Frame rendering API (`Frame`, `FrameStyle`, `FrameChars`) and `Banner::frame` to draw borders.
+- Frame paint support for solid colors and gradients.
+- CLI frame options: `--frame`, `--frame-chars`, `--frame-color`, `--frame-gradient`,
+  `--frame-palette`, and `--frame-preset`.
+- Frame example (`examples/frame_gradient.rs`) plus documentation assets.
+
 ### Added
 - CLI: `--trim-vertical` and `--no-trim-vertical` to control trimming of blank rows.
 
